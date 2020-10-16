@@ -18,8 +18,8 @@ export default {
     return {
       id,
       name,
-      latitude,
-      longitude,
+      latitude: Number(latitude),
+      longitude: Number(longitude),
       about,
       instructions,
       opening_hours,
