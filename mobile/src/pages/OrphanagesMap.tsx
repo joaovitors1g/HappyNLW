@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
+import { RectButton } from 'react-native-gesture-handler';
+import * as Location from 'expo-location';
+
+import api from '../services/api';
 
 import mapMarker from '../images/map-marker.png';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { RectButton } from 'react-native-gesture-handler';
-import api from '../services/api';
 
 interface Orphanage {
   id: number;
@@ -17,12 +25,40 @@ interface Orphanage {
 
 const OrphanagesMap: React.FC = () => {
   const [orphanages, setOrphanages] = useState<Orphanage[]>([]);
+  const [userPosition, setUserPosition] = useState({
+    latitude: 0,
+    longitude: 0,
+  });
 
   async function fetchOrphanages() {
     const response = await api.get('orphanages');
 
     setOrphanages(response.data);
   }
+
+  async function getUserPosition() {
+    const { status } = await Location.requestPermissionsAsync();
+    if (status !== 'granted') {
+      alert(
+        'Ops, precisamos da sua localização para mostrar orfanatos próximos a você.'
+      );
+      return;
+    }
+
+    const {
+      coords: { latitude, longitude },
+    } = await Location.getCurrentPositionAsync({
+      mayShowUserSettingsDialog: true,
+    });
+
+    setUserPosition({
+      latitude,
+      longitude,
+    });
+  }
+  useEffect(() => {
+    getUserPosition();
+  }, []);
 
   useFocusEffect(() => {
     fetchOrphanages();
@@ -40,14 +76,22 @@ const OrphanagesMap: React.FC = () => {
     navigate('SelectMapPosition');
   }
 
+  if (userPosition.latitude === 0) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={{
-          latitude: -23.3221034,
-          longitude: -51.1416685,
+          latitude: userPosition.latitude,
+          longitude: userPosition.longitude,
           latitudeDelta: 0.008,
           longitudeDelta: 0.008,
         }}
