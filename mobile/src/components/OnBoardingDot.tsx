@@ -1,14 +1,12 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DotProps } from 'react-native-onboarding-swiper';
 
 const OnBoardingDot: React.FC<DotProps> = ({ selected }) => {
   return (
-    <TouchableOpacity
+    <View
       style={[styles.dotStyle, selected ? styles.dotStyleActive : null]}
-      onPress={() => {}}
-    ></TouchableOpacity>
+    ></View>
   );
 };
 
