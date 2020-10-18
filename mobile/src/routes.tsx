@@ -8,6 +8,7 @@ import SelectMapPosition from './pages/SelectMapPosition';
 import OrphanageData from './pages/OrphanageData';
 import OrphanageCreationSuccess from './pages/OrphanageCreationSuccess';
 import CancelCreateOrphanageForm from './pages/CancelCreateOrphanageForm';
+import OnBoardingSlides from './pages/OnBoardingSlides';
 import Header from './components/Header';
 
 const { Navigator, Screen } = createStackNavigator();
@@ -23,6 +24,7 @@ const Routes: React.FC = () => {
           },
         }}
       >
+        <Screen name='OnBoardingSlides' component={OnBoardingSlides} />
         <Screen name='OrphanagesMap' component={OrphanagesMap} />
         <Screen
           name='OrphanageDetails'
