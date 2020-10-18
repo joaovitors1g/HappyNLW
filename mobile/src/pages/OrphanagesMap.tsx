@@ -79,7 +79,7 @@ const OrphanagesMap: React.FC = () => {
   if (userPosition.latitude === 0) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator />
+        <ActivityIndicator color='#15C3D6' />
       </View>
     );
   }
@@ -96,6 +96,12 @@ const OrphanagesMap: React.FC = () => {
           longitudeDelta: 0.008,
         }}
       >
+        <Marker
+          coordinate={{
+            latitude: userPosition.latitude,
+            longitude: userPosition.longitude,
+          }}
+        />
         {orphanages.map((orphanage) => (
           <Marker
             icon={mapMarker}
