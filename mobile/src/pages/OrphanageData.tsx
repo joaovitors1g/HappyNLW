@@ -265,7 +265,10 @@ export default function OrphanageData() {
       )}
 
       <RectButton
-        style={styles.nextButton}
+        style={[
+          styles.nextButton,
+          formStepIndex === 1 ? styles.finishButton : null,
+        ]}
         onPress={() => {
           if (formStepIndex === 0) {
             setFormStepIndex(1);
@@ -414,6 +417,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 56,
     marginTop: 32,
+  },
+
+  finishButton: {
+    backgroundColor: '#3CDC8C',
   },
 
   nextButtonText: {
