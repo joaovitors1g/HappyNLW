@@ -24,6 +24,7 @@ const SignUp: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const passwordRef = useRef<any>(null);
+  const confirmPasswordRef = useRef<any>(null);
 
   function handleSubmit() {
     const data = {
@@ -57,7 +58,8 @@ const SignUp: React.FC = () => {
           onChangeText={setPassword}
           style={styles.input}
           ref={passwordRef}
-          onSubmitEditing={handleSubmit}
+          returnKeyType='next'
+          onSubmitEditing={() => confirmPasswordRef.current.focus()}
         />
         <Text style={styles.label}>Confirme a senha</Text>
         <TextInput
@@ -65,7 +67,7 @@ const SignUp: React.FC = () => {
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           style={styles.input}
-          ref={passwordRef}
+          ref={confirmPasswordRef}
           onSubmitEditing={handleSubmit}
         />
         <BorderlessButton onPress={() => navigate('Login')}>
