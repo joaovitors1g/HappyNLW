@@ -6,6 +6,8 @@ import OrphanagesMap from './pages/OrphanagesMap';
 import OrphanageDetails from './pages/OrphanageDetails';
 import SelectMapPosition from './pages/SelectMapPosition';
 import OrphanageData from './pages/OrphanageData';
+import OrphanageCreationSuccess from './pages/OrphanageCreationSuccess';
+import CancelCreateOrphanageForm from './pages/CancelCreateOrphanageForm';
 import Header from './components/Header';
 
 const { Navigator, Screen } = createStackNavigator();
@@ -21,6 +23,14 @@ const Routes: React.FC = () => {
           },
         }}
       >
+        <Screen
+          name='OrphanageCreationSuccess'
+          component={OrphanageCreationSuccess}
+        />
+        <Screen
+          name='CancelCreateOrphanageForm'
+          component={CancelCreateOrphanageForm}
+        />
         <Screen name='OrphanagesMap' component={OrphanagesMap} />
         <Screen
           name='OrphanageDetails'
