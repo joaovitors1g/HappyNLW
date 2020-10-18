@@ -23,14 +23,6 @@ const Routes: React.FC = () => {
           },
         }}
       >
-        <Screen
-          name='OrphanageCreationSuccess'
-          component={OrphanageCreationSuccess}
-        />
-        <Screen
-          name='CancelCreateOrphanageForm'
-          component={CancelCreateOrphanageForm}
-        />
         <Screen name='OrphanagesMap' component={OrphanagesMap} />
         <Screen
           name='OrphanageDetails'
@@ -55,6 +47,14 @@ const Routes: React.FC = () => {
             header: () => <Header title='Informe os dados' />,
           }}
           component={OrphanageData}
+        />
+        <Screen
+          name='OrphanageCreationSuccess'
+          component={OrphanageCreationSuccess}
+        />
+        <Screen
+          name='CancelCreateOrphanageForm'
+          component={CancelCreateOrphanageForm}
         />
       </Navigator>
     </NavigationContainer>
