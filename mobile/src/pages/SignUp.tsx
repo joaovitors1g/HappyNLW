@@ -70,7 +70,7 @@ const SignUp: React.FC = () => {
           ref={confirmPasswordRef}
           onSubmitEditing={handleSubmit}
         />
-        <BorderlessButton onPress={() => navigate('Login')}>
+        <BorderlessButton onPress={() => navigate('SignIn')}>
           <Text style={styles.createAccountText}>Já possuo uma conta</Text>
         </BorderlessButton>
         <RectButton style={styles.enterButton} onPress={handleSubmit}>
