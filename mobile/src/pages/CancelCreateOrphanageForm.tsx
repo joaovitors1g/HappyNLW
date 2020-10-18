@@ -1,9 +1,17 @@
 import React from 'react';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { RectButton, TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const CancelCreateOrphanageForm: React.FC = () => {
+interface CancelCreateOrphanageFormProps {
+  onButtonNoTap: () => void;
+  onButtonYesTap: () => void;
+}
+
+const CancelCreateOrphanageForm: React.FC<CancelCreateOrphanageFormProps> = ({
+  onButtonNoTap,
+  onButtonYesTap,
+}) => {
   return (
     <>
       <StatusBar
@@ -20,10 +28,16 @@ const CancelCreateOrphanageForm: React.FC = () => {
           Tem certeza que quer cancelar esse cadastro?
         </Text>
         <View style={styles.cancelButtonsContainer}>
-          <TouchableOpacity style={styles.cancelButtonNot}>
+          <TouchableOpacity
+            style={styles.cancelButtonNot}
+            onPress={onButtonNoTap}
+          >
             <Text style={styles.cancelButtonNotText}>Não</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cancelButtonYes}>
+          <TouchableOpacity
+            style={styles.cancelButtonYes}
+            onPress={onButtonYesTap}
+          >
             <Text style={styles.cancelButtonNotText}>Sim</Text>
           </TouchableOpacity>
         </View>
