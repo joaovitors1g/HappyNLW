@@ -10,6 +10,8 @@ import OrphanageCreationSuccess from './pages/OrphanageCreationSuccess';
 import CancelCreateOrphanageForm from './pages/CancelCreateOrphanageForm';
 import OnBoardingSlides from './pages/OnBoardingSlides';
 import Header from './components/Header';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -24,6 +26,8 @@ const Routes: React.FC = () => {
           },
         }}
       >
+        <Screen name='SignIn' component={SignIn} />
+        <Screen name='SignUp' component={SignUp} />
         <Screen name='OnBoardingSlides' component={OnBoardingSlides} />
         <Screen name='OrphanagesMap' component={OrphanagesMap} />
         <Screen
