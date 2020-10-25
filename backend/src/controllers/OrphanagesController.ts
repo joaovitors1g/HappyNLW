@@ -10,7 +10,7 @@ export default {
     const orphanagesRepository = getRepository(Orphanage);
 
     const orphanages = await orphanagesRepository.find({
-      relations: ['images'],
+      relations: ['images', 'user'],
     });
 
     return res.json(orphanageView.renderMany(orphanages));
@@ -20,13 +20,14 @@ export default {
     const orphanagesRepository = getRepository(Orphanage);
 
     const orphanage = await orphanagesRepository.findOneOrFail(req.params.id, {
-      relations: ['images'],
+      relations: ['images', 'user'],
     });
 
-    return res.json(orphanageView.render(orphanage));
+    return res.json(orphanageView.render(orphanage, true));
   },
 
   async create(req: Request, res: Response) {
+    console.log(req);
     const files = req.files as Express.Multer.File[];
 
     const {
@@ -52,6 +53,7 @@ export default {
       images: files.map((image) => ({
         path: image.filename,
       })),
+      user_id: Number(req.user.id),
     };
 
     const schema = Yup.object().shape({
@@ -77,6 +79,6 @@ export default {
 
     await orphanagesRepository.save(orphanage);
 
-    return res.status(201).json(orphanageView.render(orphanage));
+    return res.status(201).json(orphanageView.render(orphanage, true));
   },
 };
