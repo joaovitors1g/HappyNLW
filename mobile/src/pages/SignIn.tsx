@@ -15,19 +15,19 @@ import {
   TextInput,
 } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import api from '../services/api';
+import { useDispatch } from 'react-redux';
+import { signInRequest } from '../store/modules/auth/actions';
 
 const Login: React.FC = () => {
   const { navigate } = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const passwordRef = useRef<any>(null);
+  const dispatch = useDispatch();
 
-  function handleSubmit() {
-    const data = {
-      email,
-      password,
-    };
+  async function handleSubmit() {
+    dispatch(signInRequest(email, password));
   }
 
   return (
