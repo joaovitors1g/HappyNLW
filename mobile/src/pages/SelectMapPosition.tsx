@@ -32,6 +32,7 @@ export default function SelectMapPosition() {
     latitude: 0,
     longitude: 0,
   });
+
   const [
     positionWatcher,
     setPositionWatcher,
@@ -41,10 +42,12 @@ export default function SelectMapPosition() {
 
   useEffect(() => {
     async function startWatchingUserLocation() {
-      const location = await Location.getCurrentPositionAsync({});
+      const {
+        coords: { latitude, longitude },
+      } = await Location.getCurrentPositionAsync();
       setUserPosition({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
+        latitude,
+        longitude,
       });
       const watcher = await Location.watchPositionAsync({}, (location) => {
         const {
