@@ -2,10 +2,12 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import Image from './Image';
+import User from './User';
 
 @Entity('orphanages')
 export default class Orphanage {
@@ -40,4 +42,15 @@ export default class Orphanage {
     name: 'orphanage_id',
   })
   images: Image[];
+
+  @Column()
+  user_id: number;
+
+  @ManyToOne(() => User, (user) => user.orphanages, {
+    cascade: ['insert', 'update'],
+  })
+  @JoinColumn({
+    name: 'user_id',
+  })
+  user: User;
 }
