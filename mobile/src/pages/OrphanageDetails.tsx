@@ -13,9 +13,10 @@ import { Feather, FontAwesome } from '@expo/vector-icons';
 
 import mapMarkerImg from '../images/map-marker.png';
 import { RectButton, TouchableOpacity } from 'react-native-gesture-handler';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../services/api';
 import { AppLoading } from 'expo';
+import { useSelector } from 'react-redux';
 
 interface Orphanage {
   name: string;
@@ -33,17 +34,21 @@ interface Orphanage {
 
 export default function OrphanageDetails() {
   const route = useRoute();
+  const user = useSelector<any, any>((state) => state.user.profile);
   const { id } = route.params as { id: number };
   const [orphanage, setOrphanage] = useState<Orphanage>();
+  const { navigate } = useNavigation();
+
   useEffect(() => {
     async function fetchOrphanage() {
-      const response = await api.get(`orphanages/${id}`);
-
-      setOrphanage(response.data);
+      try {
+        const response = await api.get(`orphanages/${id}`);
+        setOrphanage(response.data);
+      } catch {}
     }
 
     fetchOrphanage();
-  }, []);
+  }, [id]);
 
   function handleOpenGoogleMapRoutes() {
     Linking.openURL(
@@ -77,6 +82,20 @@ export default function OrphanageDetails() {
 
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{orphanage.name}</Text>
+        <TouchableOpacity
+          style={styles.authorData}
+          onPress={() =>
+            navigate('AuthorDetails', {
+              user,
+            })
+          }
+        >
+          <Image
+            source={{ uri: `https://ui-avatars.com/api/?name=${user.name}` }}
+            style={styles.authorAvatar}
+          />
+          <Text style={styles.authorName}>{user.name}</Text>
+        </TouchableOpacity>
         <Text style={styles.description}>{orphanage.about}</Text>
 
         <View style={styles.mapContainer}>
@@ -171,6 +190,25 @@ const styles = StyleSheet.create({
     color: '#4D6F80',
     fontSize: 30,
     fontFamily: 'Nunito_700Bold',
+  },
+
+  authorData: {
+    flexDirection: 'row',
+    marginTop: 12,
+    alignItems: 'center',
+  },
+
+  authorAvatar: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+  },
+
+  authorName: {
+    color: '#4D6F80',
+    fontSize: 14,
+    fontFamily: 'Nunito_600SemiBold',
+    marginLeft: 15,
   },
 
   description: {
