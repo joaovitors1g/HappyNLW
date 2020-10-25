@@ -2,7 +2,7 @@ import Orphanage from '../models/Orphanage';
 import imagesView from './images_view';
 
 export default {
-  render(orphanage: Orphanage) {
+  render(orphanage: Orphanage, withUser: boolean) {
     const {
       id,
       name,
@@ -13,9 +13,10 @@ export default {
       opening_hours,
       open_on_weekends,
       images,
+      user,
     } = orphanage;
 
-    return {
+    let orphanageView = {
       id,
       name,
       latitude: Number(latitude),
@@ -26,8 +27,14 @@ export default {
       open_on_weekends,
       images: imagesView.renderMany(images),
     };
+
+    if (user && withUser) {
+      orphanageView = Object.assign(orphanageView, { user });
+    }
+
+    return orphanageView;
   },
-  renderMany(orphanages: Orphanage[]) {
-    return orphanages.map((orphanage) => this.render(orphanage));
+  renderMany(orphanages: Orphanage[], withUser = false) {
+    return orphanages.map((orphanage) => this.render(orphanage, withUser));
   },
 };
