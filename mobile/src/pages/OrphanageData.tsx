@@ -87,18 +87,20 @@ export default function OrphanageData() {
     fd.append('longitude', String(longitude));
     fd.append('opening_hours', opening_hours);
     fd.append('open_on_weekends', String(open_on_weekends));
-
     images.forEach((image, index) => {
       fd.append('images', {
         type: 'image/jpg',
-        uri: image,
+        uri: image.uri,
         name: `image_${index}.jpg`,
       } as any);
     });
 
-    await api.post('orphanages', fd);
-
-    navigation.navigate('OrphanagesMap');
+    try {
+      await api.post('orphanages', fd);
+      navigation.navigate('OrphanageCreationSuccess');
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   useEffect(() => {
