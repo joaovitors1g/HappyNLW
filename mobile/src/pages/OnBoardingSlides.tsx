@@ -1,15 +1,33 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
+import { useDispatch, useSelector } from 'react-redux';
 import OnBoardingDot from '../components/OnBoardingDot';
 import OnBoardingNextButton from '../components/OnBoardingNextButton';
 
 import childrens from '../images/childrens.png';
 import happyEarth from '../images/happy-earth.png';
+import { updateFirstAccess } from '../store/modules/user/actions';
 
 const OnBoardingSlides: React.FC = () => {
+  const isFirstAccess = useSelector<
+    { user: { isFirstAccess: boolean } },
+    boolean
+  >((state) => state.user.isFirstAccess);
   const { navigate } = useNavigation();
+  const dispatch = useDispatch();
+
+  function handleDonePress() {
+    dispatch(updateFirstAccess());
+    navigate('OrphanagesMap');
+  }
+
+  useEffect(() => {
+    if (!isFirstAccess) {
+      navigate('OrphanagesMap');
+    }
+  }, []);
 
   return (
     <Onboarding
@@ -54,7 +72,7 @@ const OnBoardingSlides: React.FC = () => {
       NextButtonComponent={OnBoardingNextButton}
       DotComponent={OnBoardingDot}
       DoneButtonComponent={OnBoardingNextButton}
-      onDone={() => navigate('OrphanagesMap')}
+      onDone={handleDonePress}
     />
   );
 };
