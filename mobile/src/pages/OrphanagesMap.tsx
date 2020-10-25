@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -24,12 +24,11 @@ interface Orphanage {
 }
 
 const OrphanagesMap: React.FC = () => {
-  const [orphanages, setOrphanages] = useState<Orphanage[]>([]);
-  const [userPosition, setUserPosition] = useState({
-    latitude: 0,
+  const [location, setLocation] = useState({
     longitude: 0,
+    latitude: 0,
   });
-
+  const [orphanages, setOrphanages] = useState<Orphanage[]>([]);
   async function fetchOrphanages() {
     const response = await api.get('orphanages');
 
@@ -51,7 +50,7 @@ const OrphanagesMap: React.FC = () => {
       mayShowUserSettingsDialog: true,
     });
 
-    setUserPosition({
+    setLocation({
       latitude,
       longitude,
     });
@@ -60,9 +59,11 @@ const OrphanagesMap: React.FC = () => {
     getUserPosition();
   }, []);
 
-  useFocusEffect(() => {
+  const focusEffectCallback = useCallback(() => {
     fetchOrphanages();
-  });
+  }, []);
+
+  useFocusEffect(focusEffectCallback);
 
   const { navigate } = useNavigation();
 
@@ -76,7 +77,7 @@ const OrphanagesMap: React.FC = () => {
     navigate('SelectMapPosition');
   }
 
-  if (userPosition.latitude === 0) {
+  if (location.latitude === 0) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator color='#15C3D6' />
@@ -90,16 +91,16 @@ const OrphanagesMap: React.FC = () => {
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={{
-          latitude: userPosition.latitude,
-          longitude: userPosition.longitude,
+          latitude: location.latitude,
+          longitude: location.longitude,
           latitudeDelta: 0.008,
           longitudeDelta: 0.008,
         }}
       >
         <Marker
           coordinate={{
-            latitude: userPosition.latitude,
-            longitude: userPosition.longitude,
+            latitude: location.latitude,
+            longitude: location.longitude,
           }}
         />
         {orphanages.map((orphanage) => (
