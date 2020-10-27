@@ -30,11 +30,17 @@ interface Orphanage {
     id: number;
     url: string;
   }[];
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    avatar_url: string;
+  };
 }
 
 export default function OrphanageDetails() {
   const route = useRoute();
-  const user = useSelector<any, any>((state) => state.user.profile);
+  // const user = useSelector<any, any>((state) => state.user.profile);
   const { id } = route.params as { id: number };
   const [orphanage, setOrphanage] = useState<Orphanage>();
   const { navigate } = useNavigation();
@@ -86,15 +92,17 @@ export default function OrphanageDetails() {
           style={styles.authorData}
           onPress={() =>
             navigate('AuthorDetails', {
-              user,
+              user: orphanage.user,
             })
           }
         >
           <Image
-            source={{ uri: `https://ui-avatars.com/api/?name=${user.name}` }}
+            source={{
+              uri: `https://ui-avatars.com/api/?name=${orphanage.user.name}`,
+            }}
             style={styles.authorAvatar}
           />
-          <Text style={styles.authorName}>{user.name}</Text>
+          <Text style={styles.authorName}>{orphanage.user.name}</Text>
         </TouchableOpacity>
         <Text style={styles.description}>{orphanage.about}</Text>
 
