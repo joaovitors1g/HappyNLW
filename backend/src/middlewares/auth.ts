@@ -17,7 +17,10 @@ export default (req: Request, res: Response, next: NextFunction) => {
     return res.status(400).send();
   }
 
-  const { sub: id } = jwt.verify(token, '123456') as JWTPayload;
+  const { sub: id } = jwt.verify(
+    token,
+    String(process.env.JWT_SECRET)
+  ) as JWTPayload;
 
   req.user = { id };
 
