@@ -1,8 +1,8 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Map, Marker, TileLayer } from 'react-leaflet';
+import { MapContainer, Marker, TileLayer, MapConsumer } from 'react-leaflet';
 import { FiPlus } from 'react-icons/fi';
-import { LeafletMouseEvent } from 'leaflet';
+import { LeafletMouseEvent, Map } from 'leaflet';
 
 import Sidebar from '../components/Sidebar';
 import mapIcon from '../utils/mapIcon';
@@ -25,6 +25,7 @@ export default function CreateOrphanage() {
   const [open_on_weekends, setOpenOnWeekends] = useState(true);
   const [images, setImages] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>();
+  const [leafletMap, setLeafletMap] = useState<Map>();
 
   function handleMapClick(event: LeafletMouseEvent) {
     setPosition({
@@ -32,6 +33,12 @@ export default function CreateOrphanage() {
       longitude: event.latlng.lng,
     });
   }
+
+  useEffect(() => {
+    if (leafletMap) {
+      leafletMap.addEventListener('click', handleMapClick);
+    }
+  }, [leafletMap]);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -84,15 +91,21 @@ export default function CreateOrphanage() {
           <fieldset>
             <legend>Dados</legend>
 
-            <Map
+            <MapContainer
               center={[-27.2092052, -49.6401092]}
               style={{ width: '100%', height: 280 }}
               zoom={15}
-              onClick={handleMapClick}
             >
               <TileLayer
                 url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
               />
+
+              <MapConsumer>
+                {(map) => {
+                  setLeafletMap(map);
+                  return null;
+                }}
+              </MapConsumer>
 
               {position.latitude !== 0 && (
                 <Marker
@@ -101,7 +114,7 @@ export default function CreateOrphanage() {
                   position={[position.latitude, position.longitude]}
                 />
               )}
-            </Map>
+            </MapContainer>
 
             <div className='input-block'>
               <label htmlFor='name'>Nome</label>
