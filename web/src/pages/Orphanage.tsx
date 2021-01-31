@@ -10,7 +10,7 @@ import mapIcon from '../utils/mapIcon';
 import '../styles/pages/orphanage.css';
 import api from '../services/api';
 
-interface Orphanage {
+interface OrphanageData {
   name: string;
   latitude: number;
   longitude: number;
@@ -26,7 +26,7 @@ interface Orphanage {
 
 export default function Orphanage() {
   const { id } = useParams<{ id: string }>();
-  const [orphanage, setOrphanage] = useState<Orphanage>();
+  const [orphanage, setOrphanage] = useState<OrphanageData>();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   useEffect(() => {
