@@ -79,6 +79,8 @@ export default {
 
     await orphanagesRepository.save(orphanage);
 
+    req.io.emit('new-orphanage', orphanage);
+
     return res.status(201).json(orphanageView.render(orphanage, true));
   },
 };
