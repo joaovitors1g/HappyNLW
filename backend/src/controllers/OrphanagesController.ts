@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 
 import orphanageView from '../views/orphanages_view';
 import Orphanage from '../models/Orphanage';
+import { Server } from 'socket.io';
 
 export default {
   async index(req: Request, res: Response) {
@@ -79,7 +80,9 @@ export default {
 
     await orphanagesRepository.save(orphanage);
 
-    req.io.emit('new-orphanage', orphanage);
+    const io = req.io as Server;
+
+    io.emit('new-orphanage', orphanage);
 
     return res.status(201).json(orphanageView.render(orphanage, true));
   },
