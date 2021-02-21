@@ -15,6 +15,7 @@ import * as Location from 'expo-location';
 import api from '../services/api';
 
 import mapMarker from '../images/map-marker.png';
+import { getSocket } from '../services/socket';
 
 interface Orphanage {
   id: number;
@@ -76,6 +77,19 @@ const OrphanagesMap: React.FC = () => {
   function handleNavigateToCreateOrphanage() {
     navigate('SelectMapPosition');
   }
+
+  useEffect(() => {
+    const socket = getSocket();
+    const listener = (orphanage: Orphanage) => {
+      setOrphanages((oldOrphanages) => [...oldOrphanages, orphanage]);
+    };
+
+    socket?.on('new-orphanage', listener);
+
+    return () => {
+      socket?.off('new-orphanage', listener);
+    };
+  }, []);
 
   if (location.latitude === 0) {
     return (
